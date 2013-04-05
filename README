@@ -27,24 +27,13 @@ USAGE
 IDASCRIPT SCRIPTS
 
 	All IDAPython scripts intended for use with idascript must import the idascript Python module. If you want
-	IDA to exit when the script is finished, the script must also call sys.exit when done. Example:
+	IDA to exit when the script is finished, the script must also call idascript.exit when done. Example:
 
 		import idascript
 
 		print "I am an IDA script. My first command line argument is:", sys.argv[1]
 
-		sys.exit(0)
+		idascript.exit()
 
-	It is fairly easy to write your scripts such that they can be run from either the command line via idascript or
-	from the interactive IDA GUI simply by including or commenting out the 'import idascript' line:
-
-		# Comment out this import to run this script from the GUI
-		import idascript
-
-		try:
-			idascript
-			print "I am being run from the command line. I will now exit."
-			sys.exit(0)
-		except:
-			print "I am not being run from the command line. Goodbye."
-
+	Scripts written in this manner can be used either through idascript utility or manually from inside the IDA GUI. 
+	The idascript module will detect when it is not being run via the idascript utility and will disable itself.

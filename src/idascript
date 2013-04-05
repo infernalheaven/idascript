@@ -15,8 +15,9 @@ import sys
 import tempfile
 import subprocess
 
-OUTFILE = os.path.join(tempfile.gettempdir(), 'ida_script_stdout.txt')
+idc_args = ['__idascript_active__']
 IDA_INSTALL_PATH = "%%IDA_INSTALL_PATH%%"
+OUTFILE = os.path.join(tempfile.gettempdir(), 'ida_script_stdout.txt')
 
 # Check usage
 if len(sys.argv) < 2:
@@ -36,14 +37,14 @@ else:
 if len(sys.argv) >= 3:
 	idb = os.path.abspath(sys.argv[1])
 	idc = os.path.abspath(sys.argv[2])
-	idc_args = sys.argv[3:]
+	idc_args += sys.argv[3:]
 	
 	if idb.endswith('.i64'):
 		suffix = '64'
 else:
 	idc = os.path.abspath(sys.argv[1])
 	idb = "-t"
-	idc_args = sys.argv[2:]
+	idc_args += sys.argv[2:]
 
 # Use the right IDA executable for the right platform
 if sys.platform == 'win32':

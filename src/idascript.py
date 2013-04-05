@@ -14,7 +14,12 @@ import sys
 import tempfile
 import idc
 import idaapi
-import idautils
+
+__idascript_active__ = False
+
+def exit(code=0):
+	if __idascript_active__:
+		idc.Exit(code)
 
 class ToFileStdOut(object):
     def __init__(self, outfile):
@@ -32,11 +37,14 @@ class ToFileStdOut(object):
     def __del__(self):
         self.outfile.close()
 
-# Redirect stdout and stderr to the output file
-sys.stdout = sys.stderr = ToFileStdOut(os.path.join(tempfile.gettempdir(), 'ida_script_stdout.txt'))
-# Make the normal sys.argv and sys.exit function properly
-sys.argv = idc.ARGV
-sys.exit = idc.Exit
-# Wait for IDA's auto analysis to finish
-idaapi.autoWait()
+if len(idc.ARGV) > 1 and idc.ARGV[1] == '__idascript_active__':
+	__idascript_active__ = True
+	idc.ARGV.pop(1)
+	# Redirect stdout and stderr to the output file
+	sys.stdout = sys.stderr = ToFileStdOut(os.path.join(tempfile.gettempdir(), 'ida_script_stdout.txt'))
+	# Make the normal sys.argv and sys.exit function properly
+	sys.argv = idc.ARGV
+	sys.exit = idc.Exit
+	# Wait for IDA's auto analysis to finish
+	idaapi.autoWait()
 
