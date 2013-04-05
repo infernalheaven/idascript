@@ -46,5 +46,5 @@ IDASCRIPT SCRIPTS
 			print "I am being run from the command line. I will now exit."
 			sys.exit(0)
 		except:
-			print "I am not being run from the command line. Goodbyte."
+			print "I am not being run from the command line. Goodbye."
 
